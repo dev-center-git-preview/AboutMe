@@ -9,29 +9,29 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import com.example.aboutme.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var nicknameEdit: EditText
-    private lateinit var nicknameText: TextView
-    private lateinit var doneButton: Button
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.setContentView(R.layout.activity_main)
 
-        nicknameEdit = findViewById(R.id.nickname_edit)
-        nicknameText = findViewById(R.id.nickname_text)
-        doneButton = findViewById(R.id.done_button)
-
-        doneButton.setOnClickListener { addNickname(it) }
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.doneButton.setOnClickListener { addNickname(it) }
     }
 
     private fun addNickname(doneButton: View): Unit {
-        nicknameText.text = nicknameEdit.text
+        binding.apply {
+            binding.nicknameText.text = binding.nicknameEdit.text
 
-        nicknameText.visibility = View.VISIBLE
-        nicknameEdit.visibility = View.GONE
-        doneButton.visibility = View.GONE
+            binding.nicknameText.visibility = View.VISIBLE
+            binding.nicknameEdit.visibility = View.GONE
+            doneButton.visibility = View.GONE
+
+            invalidateAll()
+        }
 
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(doneButton.windowToken, 0)
